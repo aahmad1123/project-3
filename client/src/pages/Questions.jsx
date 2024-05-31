@@ -1,9 +1,8 @@
 import QuestionsList from "../components/QuestionsList";
 import AnswerList from "../components/AnswerList";
-import Nav from "../components/Nav";
+import { Link } from "react-router-dom";
 
-
-function Home(){
+function Questions(){
     const questions = [
         {
             question: "AFI Top 100 Search Engine",
@@ -46,7 +45,7 @@ function Home(){
     return(
 <div>
     <h1>Final Project</h1>
-    <h4><Nav /></h4>
+    <h5 className="nav-list"><Link className="link" to="/" activeClassName = "active">Home</Link></h5>
     <div className="container ">
         <div>
             {questions.map((question, index) => (
@@ -56,7 +55,7 @@ function Home(){
                         username = {question.username}
                         questionText={question.questionText}
                    />
-                        {/* <div className="answer"> 
+                        <div className="answer"> 
                             {answer.map((answer, index) => (
                                 <AnswerList
                                     answer={answer.answer}
@@ -65,7 +64,7 @@ function Home(){
                                       /> 
                         ))}
  
-                   </div> */}
+                   </div>
                 </div>
             ))}
         </div>
@@ -74,4 +73,4 @@ function Home(){
     )
 };
 
-export default Home;
+export default Questions;
