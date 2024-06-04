@@ -1,6 +1,6 @@
 const typeDefs = `
 type User {
-   _id: ID
+   _id: ID!
    firstName: String!
    lastName: String!
    password: String
@@ -8,7 +8,7 @@ type User {
 }
 
 type Answer{
-    _id: ID
+    _id: ID!
     body: String
     user: [User]
     question: [Question]
@@ -17,7 +17,7 @@ type Answer{
 }
 
 type Question {
-    _id: ID
+    _id: ID!
     title: String
     body: String
     tags: String
@@ -32,16 +32,21 @@ type Question {
 type Query {
     questions: [Question]!
     question(_id: ID): Question
-    answer: [Answer]!
+    answers: [Answer]!
     answer(_id: ID): Answer
 }
 
+type Auth {
+    token: ID!
+    user: User
+  }
+
 type Mutation {
-    addQuestion(title: String! body: String!, tags: String, user:User)
-    addAnswer(body: String!, user: User)
-    updateQuestion(title: String, body: String, tags: String)
-    addUser(firstName: String, lastName: String, email:String, password:String)
-    updateUser(firstName: String, lastName: String, email: String,)
+    addQuestion(title: String! body: String!, tags: String, userId: ID!):Question
+    addAnswer(body: String!, userId: ID!):Answer
+    updateQuestion(title: String, body: String, tags: String):Question
+    addUser(firstName: String, lastName: String, email:String, password:String):User
+    updateUser(firstName: String, lastName: String, email: String,):User
     login(email: String!, password: String!): Auth
 }
 
