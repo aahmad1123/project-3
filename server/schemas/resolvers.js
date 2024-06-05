@@ -4,6 +4,12 @@ const { AuthenticationError } = require('../utlis/Auth');
 
 const resolvers = {
     Query: {
+    //   users: async () => {
+    //     return await User.find();
+    //   },
+    //   user: async (parent, { id }) => {
+    //     return await User.findById(id).populate('questions').populate('answers');
+    //   },
       questions: async () => {
         try {
           return await Question.find();
