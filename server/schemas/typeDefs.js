@@ -1,54 +1,32 @@
 const typeDefs = `
-type User {
-   _id: ID!
-   firstName: String!
-   lastName: String!
-   password: String
-   email: String 
-}
-
-type Answer{
-    _id: ID!
-    body: String
-    user: [User]
-    question: [Question]
-    upvotes: Int
-    downvotes: Int
-}
-
-type Question {
-    _id: ID!
-    title: String
-    body: String
-    tags: String
-    user: User
-    answer: Answer
-    upvotes: Int
-    downvotes: Int
-    createdAt: String
-    updatedAt: String
-}
-
-type Query {
-    questions: [Question]!
-    question(_id: ID): Question
-    answers: [Answer]!
-    answer(_id: ID): Answer
-}
-
-type Auth {
-    token: ID!
-    user: User
+  type Profile {
+    _id: ID
+    name: String
+    email: String
+    password: String
+    skills: [String]!
   }
 
-type Mutation {
-    addQuestion(title: String! body: String!, tags: String, userId: ID!):Question
-    addAnswer(body: String!, userId: ID!):Answer
-    updateQuestion(title: String, body: String, tags: String):Question
-    addUser(firstName: String, lastName: String, email:String, password:String):User
-    updateUser(firstName: String, lastName: String, email: String,):User
-    login(email: String!, password: String!): Auth
-}
+  type Auth {
+    token: ID!
+    profile: Profile
+  }
 
-`
-module.exports= typeDefs
+  type Query {
+    profiles: [Profile]!
+    profile(profileId: ID!): Profile
+    # Because we have the context functionality in place to check a JWT and decode its data, we can use a query that will always find and return the logged in user's data
+    me: Profile
+  }
+
+  type Mutation {
+    addProfile(name: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+
+    addSkill(profileId: ID!, skill: String!): Profile
+    removeProfile: Profile
+    removeSkill(skill: String!): Profile
+  }
+`;
+
+module.exports = typeDefs;
