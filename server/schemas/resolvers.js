@@ -1,5 +1,5 @@
 const  {User, Question, Answer}  = require('../models');
-const { AuthenticationError } = require('../utlis/Auth');
+const { AuthenticationError } = require('../utils/Auth');
 
 
 const resolvers = {
