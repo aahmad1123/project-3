@@ -12,7 +12,7 @@ const resolvers = {
     //   },
       questions: async () => {
         try {
-          return await Question.find();
+          return await Question.find().populate('user').populate('answers');
         } catch (err) {
           console.error('Error fetching questions:', err);
           throw new Error('Failed to fetch questions');
@@ -20,7 +20,7 @@ const resolvers = {
       },
       question: async (parent, { id }) => {
         try {
-          return await Question.findById(id);
+          return await Question.findById(id).populate('user').populate('answers');
         } catch (err) {
           console.error('Error fetching question:', err);
           throw new Error('Failed to fetch question');
@@ -28,7 +28,7 @@ const resolvers = {
       },
       answers: async () => {
         try {
-          return await Answer.find();
+          return await Answer.find().populate('user').populate('question');
         } catch (err) {
           console.error('Error fetching answers:', err);
           throw new Error('Failed to fetch answers');
@@ -36,7 +36,7 @@ const resolvers = {
       },
       answer: async (parent, { id }) => {
         try {
-          return await Answer.findById(id);
+          return await Answer.findById(id).populate('user').populate('question');
         } catch (err) {
           console.error('Error fetching answer:', err);
           throw new Error('Failed to fetch answer');
