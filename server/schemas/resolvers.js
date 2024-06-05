@@ -1,85 +1,117 @@
-const { Profile } = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const  {User, Question, Answer}  = require('../models');
+const { AuthenticationError } = require('../utils/Auth');
+
 
 const resolvers = {
-  Query: {
-    profiles: async () => {
-      return Profile.find();
+    Query: {
+    //   users: async () => {
+    //     return await User.find();
+    //   },
+    //   user: async (parent, { id }) => {
+    //     return await User.findById(id).populate('questions').populate('answers');
+    //   },
+      questions: async () => {
+        try {
+          return await Question.find().populate('user').populate('answers');
+        } catch (err) {
+          console.error('Error fetching questions:', err);
+          throw new Error('Failed to fetch questions');
+        }
+      },
+      question: async (parent, { id }) => {
+        try {
+          return await Question.findById(id).populate('user').populate('answers');
+        } catch (err) {
+          console.error('Error fetching question:', err);
+          throw new Error('Failed to fetch question');
+        }
+      },
+      answers: async () => {
+        try {
+          return await Answer.find().populate('user').populate('question');
+        } catch (err) {
+          console.error('Error fetching answers:', err);
+          throw new Error('Failed to fetch answers');
+        }
+      },
+      answer: async (parent, { id }) => {
+        try {
+          return await Answer.findById(id).populate('user').populate('question');
+        } catch (err) {
+          console.error('Error fetching answer:', err);
+          throw new Error('Failed to fetch answer');
+        }
+      },
     },
+    Mutation: {
+        addQuestion: async (parent, { title, body, tags, userId}) => {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new AuthenticationError('User not found');
+            }
+            const question = new Question({
+                title,
+                body,
+                tags,
+                user: userId,
+            });
+            await question.save();
+            return (await question.populate('user')).populate('answers');
+        },
 
-    profile: async (parent, { profileId }) => {
-      return Profile.findOne({ _id: profileId });
-    },
-    // By adding context to our query, we can retrieve the logged in user without specifically searching for them
-    me: async (parent, args, context) => {
-      if (context.user) {
-        return Profile.findOne({ _id: context.user._id });
-      }
-      throw AuthenticationError;
-    },
-  },
-
-  Mutation: {
-    addProfile: async (parent, { name, email, password }) => {
-      const profile = await Profile.create({ name, email, password });
-      const token = signToken(profile);
-
-      return { token, profile };
-    },
-    login: async (parent, { email, password }) => {
-      const profile = await Profile.findOne({ email });
-
-      if (!profile) {
-        throw AuthenticationError;
-      }
-
-      const correctPw = await profile.isCorrectPassword(password);
-
-      if (!correctPw) {
-        throw AuthenticationError;
-      }
-
-      const token = signToken(profile);
-      return { token, profile };
-    },
-
-    // Add a third argument to the resolver to access data in our `context`
-    addSkill: async (parent, { profileId, skill }, context) => {
-      // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
-      if (context.user) {
-        return Profile.findOneAndUpdate(
-          { _id: profileId },
-          {
-            $addToSet: { skills: skill },
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
+        addAnswer: async (parent, { body, userId, questionId }) => {
+            const user = await User.findById(userId);
+            const question = await Question.findById(questionId);
+            if (!user || !question) {
+                throw new AuthenticationError('User or Question not found');
+            }
+            const answer = new Answer({
+                body,
+                user: userId,
+                question: questionId,
+            });
+            await answer.save();
+            question.answers.push(answer);
+            await question.save();
+            return answer.populate('user').populate('question');
+        },
+        updateQuestion: async (parent, {_id, title, body, tags }) => {
+            const question = await Question.findByIdAndUpdate(
+                _id,
+                { title, body, tags },
+                { new: true  }
+            );
+            return (await question.populate('user')).populate('answers');
+            
+                
+            },
+            
+        updateUser: async (parent, { _id, firstName, lastName, email }) => {
+            return await User.findByIdAndUpdate(
+                _id,
+                { firstName, lastName, email },
+                { new: true }
         );
-      }
-      // If user attempts to execute this mutation and isn't logged in, throw an error
-      throw AuthenticationError;
-    },
-    // Set up mutation so a logged in user can only remove their profile and no one else's
-    removeProfile: async (parent, args, context) => {
-      if (context.user) {
-        return Profile.findOneAndDelete({ _id: context.user._id });
-      }
-      throw AuthenticationError;
-    },
-    // Make it so a logged in user can only remove a skill from their own profile
-    removeSkill: async (parent, { skill }, context) => {
-      if (context.user) {
-        return Profile.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { skills: skill } },
-          { new: true }
-        );
-      }
-      throw AuthenticationError;
-    },
-  },
-};
+        },
 
-module.exports = resolvers;
+        
+        login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new AuthenticationError('Invalid email or password');
+            }
+            const correctPw = await user.isCorrectPassword(password);
+            if (!correctPw) {
+                throw new AuthenticationError('Invalid email or password');
+            }
+            const token = signToken(user);
+            return { token, user };
+    },
+
+
+
+    
+    }
+
+}
+module.exports = resolvers

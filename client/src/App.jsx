@@ -42,7 +42,6 @@ function App() {
         <div className="container">
           <Outlet />
         </div>
-        <Footer />
       </div>
     </ApolloProvider>
   );

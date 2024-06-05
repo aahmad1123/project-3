@@ -1,13 +1,13 @@
 import { useQuery } from '@apollo/client';
 
-import ProfileList from '../components/ProfileList';
+import QuestionsList from '../components/QuestionsList';
 
-import { QUERY_PROFILES } from '../utils/queries';
+import { QUERY_QUESTIONS } from '../utils/queries';
 
 const Home = () => {
-  const { loading, data } = useQuery(QUERY_PROFILES);
-  const profiles = data?.profiles || [];
-  console.log(profiles)
+  const { loading, data } = useQuery(QUERY_QUESTIONS);
+  const questions = data?.questions || [];
+  console.log(questions)
   return (
     <main>
       <div className="flex-row justify-center">
@@ -15,9 +15,9 @@ const Home = () => {
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <ProfileList
-              profiles={profiles}
-              title="Here's the current roster of friends..."
+            <QuestionsList
+              questions={questions}
+              title="Questions"
             />
           )}
         </div>
