@@ -5,12 +5,12 @@ const  Answer  = require('../models/Answer')
 
 const resolvers = {
     Query: {
-      users: async () => {
-        return await User.find();
-      },
-      user: async (parent, { id }) => {
-        return await User.findById(id).populate('questions').populate('answers');
-      },
+    //   users: async () => {
+    //     return await User.find();
+    //   },
+    //   user: async (parent, { id }) => {
+    //     return await User.findById(id).populate('questions').populate('answers');
+    //   },
       questions: async () => {
         return await Question.find().populate('user').populate('answers');
       },
