@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_QUESTIONS = gql`
-query Questions {
+ query Questions{
     questions {
         title
         body
@@ -13,3 +13,7 @@ query Questions {
       }
     }
 `;
+
+// export const QUERY_QUESTION = gql`
+
+// `

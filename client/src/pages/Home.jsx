@@ -1,77 +1,77 @@
-import QuestionsList from "../components/QuestionsList";
-import AnswerList from "../components/AnswerList";
-import Nav from "../components/Nav";
+import React from 'react';
+import { useQuery } from '@apollo/client';
+import auth from '../utils/auth';
 
+import QuestionsList from '../components/QuestionsList';
+import QuestionForm from '../components/QuestionForm';
 
-function Home(){
-    const questions = [
-        {
-            question: "AFI Top 100 Search Engine",
-            username: "john",
-            questionText: "AFI Top 100 Search Engine",
-        },
-        {
-            question: "Custom Workout Playlist",
-            username: "john",
-            questionText: "Custom Workout Playlist Website",
-        },
-        {
-            question: "Weather Forecast",
-            username: "john",
-            questionText: "Weather Forecast Site",
-        },
-        {
-            question: "Note Taking Website",
-            username: "john",
-            questionText: "Note Taking Website",
-        },
-        {
-            question: "Day Planner",
-            username: "john",
-            questionText: "Day Planner Website",
-        },
-        {
-            question: "Password Generator",
-            username: "john",
-            questionText: "Password Generator",
-        },
-    ]
-    const answer = [
-        {
-            answer: "Text",
-            username: "andy"
-        }
-    ]
+import { QUERY_QUESTIONS } from '../utils/queries';
 
-    return(
-<div>
-    <h1>Final Project</h1>
-    <h4><Nav /></h4>
-    <div className="container ">
-        <div>
-            {questions.map((question, index) => (
-                <div key={index}>
-                    <QuestionsList
-                        question={question.question}
-                        username = {question.username}
-                        questionText={question.questionText}
-                   />
-                        {/* <div className="answer"> 
-                            {answer.map((answer, index) => (
-                                <AnswerList
-                                    answer={answer.answer}
-                                    username={answer.username}
+const Home = () => {
+  const { loading, data } = useQuery(QUERY_QUESTIONS);
+  const questions = data?.questions || [];
+  const isLoggedIn = auth.loggedIn();
 
-                                      /> 
-                        ))}
- 
-                   </div> */}
+  console.log(questions);
+
+  return (
+    <main>
+      <div className="flex-row justify-center">
+        <div className="col-12 col-md-10 my-3">
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              {isLoggedIn && (
+                <div>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#addQuestionModal"
+                    onClick={() => console.log("Button clicked")}
+                  >
+                    Add Question
+                  </button>
+
+                  {/* Modal */}
+                  <div
+                    className="modal fade"
+                    id="addQuestionModal"
+                    tabIndex="-1"
+                    aria-labelledby="addQuestionModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="addQuestionModalLabel">
+                            Add Question
+                          </h5>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <QuestionForm />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            ))}
+              )}
+              <QuestionsList questions={questions} title="Questions" />
+            </>
+          )}
         </div>
-    </div>
-</div>
-    )
+      </div>
+    </main>
+  );
 };
 
 export default Home;
