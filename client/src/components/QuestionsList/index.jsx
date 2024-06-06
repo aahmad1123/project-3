@@ -21,12 +21,11 @@ const ProfileList = ({ questions, title }) => {
                   {questions.user.firstName} {questions.user.lastName}
                 </h4>
 
-                {/* <Link
+                <Link
                   className="btn btn-block btn-squared btn-light text-dark"
-                  to={`/profiles/${profile._id}`}
+                  to={`/Questions/${questions._id}`}
                 >
-                  View and endorse their skills.
-                </Link> */}
+                </Link>
               </div>
             </div>
           ))}

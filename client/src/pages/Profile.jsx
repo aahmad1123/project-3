@@ -1,8 +1,8 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 
-import SkillsList from '../components/SkillsList';
-import SkillForm from '../components/SkillForm';
+// import SkillsList from '../components/SkillsList';
+// import SkillForm from '../components/SkillForm';
 
 // import { QUERY_SINGLE_PROFILE, QUERY_ME } from '../utils/queries';
 
@@ -47,16 +47,16 @@ const Profile = () => {
         skills...
       </h2>
 
-      {profile.skills?.length > 0 && (
-        <SkillsList
-          skills={profile.skills}
-          isLoggedInUser={!profileId && true}
-        />
-      )}
+      {/* {profile.skills?.length > 0 && (
+        // <SkillsList
+      //     skills={profile.skills}
+      //     isLoggedInUser={!profileId && true}
+      //   />
+      // )} */}
 
-      <div className="my-4 p-4" style={{ border: '1px dotted #1a1a1a' }}>
+      {/* <div className="my-4 p-4" style={{ border: '1px dotted #1a1a1a' }}>
         <SkillForm profileId={profile._id} />
-      </div>
+      </div> */}
     </div>
   );
 };

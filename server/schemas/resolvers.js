@@ -1,5 +1,5 @@
 const  {User, Question, Answer}  = require('../models');
-const { AuthenticationError } = require('../utils/Auth');
+const { AuthenticationError, signToken } = require('../utils/Auth');
 
 
 const resolvers = {
@@ -63,7 +63,7 @@ const resolvers = {
             const user = await User.findById(userId);
             const question = await Question.findById(questionId);
             if (!user || !question) {
-                throw new AuthenticationError('User or Question not found');
+                throw AuthenticationError('User or Question not found');
             }
             const answer = new Answer({
                 body,
@@ -75,6 +75,13 @@ const resolvers = {
             await question.save();
             return answer.populate('user').populate('question');
         },
+
+        addUser: async (parent, args) => {
+          const user = await User.create(args)
+          const token = signToken(user)
+          return {token, user}
+        },
+
         updateQuestion: async (parent, {_id, title, body, tags }) => {
             const question = await Question.findByIdAndUpdate(
                 _id,
@@ -97,12 +104,15 @@ const resolvers = {
         
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });
+            console.log(user)
             if (!user) {
-                throw new AuthenticationError('Invalid email or password');
+              console.log("one")
+                throw AuthenticationError;
             }
-            const correctPw = await user.isCorrectPassword(password);
+            const correctPw = await user.matchPassword(password);
             if (!correctPw) {
-                throw new AuthenticationError('Invalid email or password');
+              console.log("two")
+                throw AuthenticationError;
             }
             const token = signToken(user);
             return { token, user };
