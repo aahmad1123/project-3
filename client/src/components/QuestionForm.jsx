@@ -6,8 +6,8 @@ import auth from '../utils/auth';
 const AddQuestionForm = () => {
   const [formState, setFormState] = useState({ title: '', body: '', tags: '' });
   const [addQuestion, { error }] = useMutation(ADD_QUESTION);
-  const userId = auth.getProfile()._id
-//   console.log(userId)
+  const userId = auth.getProfile().data._id
+  console.log(userId)
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -25,7 +25,7 @@ const AddQuestionForm = () => {
     const tags = formState.tags
     try {
         const data = await addQuestion({
-            variables: { title, body, tags, userId  },
+            variables: { title, body, tags, userId }
           });
     
       

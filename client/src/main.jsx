@@ -7,6 +7,8 @@ import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import ErrorPage from './pages/ErrorPage';
+import Questions from './pages/Questions.jsx'
+
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,9 @@ const router = createBrowserRouter([
       }, {
         path: '/me',
         element: <Profile />
+      }, {
+        path: '/Questions/:questionsId',
+        element: <Questions />
       }
     ]
   },

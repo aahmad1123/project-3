@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 import Auth from '../../utils/auth';
 
+
 const Header = () => {
   const logout = (event) => {
     event.preventDefault();
@@ -15,6 +16,7 @@ const Header = () => {
             Final Project
           </h1>
         </Link>
+        {/* <div>Hello {user}</div> */}
         <div>
           {Auth.loggedIn() ? (
             <>
