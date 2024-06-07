@@ -31,12 +31,21 @@ export const LOGIN_USER = gql`
 `;
 
 export const ADD_QUESTION = gql`
-  mutation addQuestion($title: String!, $body: String!, $tags: String, $userId: ID!) {
+  mutation addQuestion($title: String!, $body: String!, $tags: [String], $userId: ID!) {
     addQuestion(title: $title, body: $body, tags: $tags, userId: $userId) {
       _id
       title
       body
       tags
+      user {
+        _id
+        firstName
+        lastName
+      }
+      answers {
+        _id
+        body
+      }
     }
   }
 `;
