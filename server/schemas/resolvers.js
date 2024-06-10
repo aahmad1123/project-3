@@ -14,9 +14,9 @@ const resolvers = {
         throw new Error('Failed to fetch questions');
       }
     },
-    question: async (parent, { id }) => {
+    question: async (parent, { _id }) => {
       try {
-        return await Question.findById(id).populate('user').populate({
+        return await Question.findById(_id).populate('user').populate({
           path: 'answers',
           populate: { path: 'user' }
         });
@@ -55,7 +55,10 @@ const resolvers = {
         user: userId,
       });
       await question.save();
-      return question.populate('user').populate('answers');
+      if(question){
+         return question.populate('user');
+      }
+     
     },
 
     addAnswer: async (parent, { body, userId, questionId }) => {
