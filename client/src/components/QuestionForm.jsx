@@ -30,6 +30,7 @@ const AddQuestionForm = () => {
     
       
       setFormState({ title: '', body: '', tags: '' });
+      location.reload()
     } catch (e) {
       console.error(e);
     }
@@ -38,7 +39,7 @@ const AddQuestionForm = () => {
   return (
     <form onSubmit={handleFormSubmit}>
       <div>
-        <label htmlFor="title">Title</label>
+        <label htmlFor="title">Title: </label>
         <input
           type="text"
           id="title"
@@ -46,26 +47,29 @@ const AddQuestionForm = () => {
           value={formState.title}
           onChange={handleChange}
           required
+          className='formControl'
         />
       </div>
       <div>
-        <label htmlFor="body">Body</label>
+        <label htmlFor="body">Body: </label>
         <textarea
           id="body"
           name="body"
           value={formState.body}
           onChange={handleChange}
           required
+          className='formControl'
         ></textarea>
       </div>
       <div>
-        <label htmlFor="tags">Tags</label>
+        <label htmlFor="tags">Tags: </label>
         <input
           type="text"
           id="tags"
           name="tags"
           value={formState.tags}
           onChange={handleChange}
+          className='formControl'
         />
       </div>
       <button type="submit">Add Question</button>

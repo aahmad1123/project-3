@@ -14,6 +14,16 @@ export const QUERY_QUESTIONS = gql`
     }
 `;
 
-// export const QUERY_QUESTION = gql`
-
-// `
+export const QUERY_QUESTION = gql`
+query question($_id: ID!) {
+  question(_id: $_id) {
+    title
+    body
+    _id
+    user {
+      firstName
+      lastName
+    }
+  }
+}
+`
